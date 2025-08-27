@@ -16,6 +16,11 @@ It scans a list of target URLs and extracts potential Amazon S3 bucket names fro
 ----------------------------------------------------
 USAGES
 
-python3 s3find3r.py file.txt
+python3 s3find3r.py -b
+python3 s3find3r.py -u https://example.com
+python3 s3find3r.py -f urls.txt
+python3 s3find3r.py -f urls.txt -o buckets.txt
+python3 s3find3r.py --help
+
 
 ----------------------------------------------------
