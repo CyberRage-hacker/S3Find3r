@@ -14,10 +14,7 @@ It scans a list of target URLs and extracts potential Amazon S3 bucket names fro
 - Built with ❤️ by `{CYBER RAGE}`
 
 ---
+ usages
 
-## 📦 Requirements
+python3 s3find3r.py file.txt
 
-Install the required packages using:
-
-```bash
-pip install -r requirements.txt
