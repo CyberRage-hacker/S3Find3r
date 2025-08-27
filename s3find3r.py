@@ -84,15 +84,62 @@ def print_banner():
     ]
     print(random.choice(banners))
 
+def print_help():
+    help_text = """
+Usage: python s3find3r.py [options]
+
+Options:
+  -f <file>        Scan URLs listed in a text file
+  -u <url>         Scan a single URL
+  -o <file>        Save output to a file
+  -b               Show a random banner
+  --help           Show this help message
+"""
+    print(help_text)
+
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python s3_finder.py <url_list.txt>")
+    args = sys.argv[1:]
+    urls = []
+    output_file = None
+
+    if not args or "--help" in args:
+        print_help()
+        sys.exit(0)
+
+    if "-b" in args:
+        print_banner()
+        sys.exit(0)
+
+    if "-u" in args:
+        try:
+            url_index = args.index("-u") + 1
+            urls.append(args[url_index])
+        except IndexError:
+            print("[!] Missing URL after -u")
+            sys.exit(1)
+
+    if "-f" in args:
+        try:
+            file_index = args.index("-f") + 1
+            with open(args[file_index], 'r') as f:
+                urls.extend([line.strip() for line in f if line.strip()])
+        except (IndexError, FileNotFoundError):
+            print("[!] File not found or not specified after -f")
+            sys.exit(1)
+
+    if "-o" in args:
+        try:
+            output_index = args.index("-o") + 1
+            output_file = args[output_index]
+        except IndexError:
+            print("[!] Missing file name after -o")
+            sys.exit(1)
+
+    if not urls:
+        print("[!] No URL or file provided. Use -u or -f.")
         sys.exit(1)
 
     print_banner()
-
-    with open(sys.argv[1], 'r') as f:
-        urls = [line.strip() for line in f if line.strip()]
 
     found_buckets = set()
 
@@ -106,5 +153,11 @@ if __name__ == "__main__":
     print("\n[✓] Total Unique Buckets Found:", len(found_buckets))
     for b in found_buckets:
         print(f"- {b}")
+
+    if output_file:
+        with open(output_file, "w") as out:
+            for b in found_buckets:
+                out.write(f"{b}\n")
+        print(f"\n[💾] Results saved to: {output_file}")
 
     print("\n[👑] This tool was made by CYBER RAGE")
